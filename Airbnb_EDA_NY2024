@@ -1,0 +1,44 @@
+# Import Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+
+# Load Dataset
+data = pd.read_csv('new_york_listings_2024.csv', encoding_errors='ignore')
+
+# Basic Exploration
+print(data.head())
+print(data.info())
+print(data.describe())
+
+# Data Cleaning
+data.dropna(inplace=True)           # Remove missing values
+data.drop_duplicates(inplace=True)  # Remove duplicates
+
+# Feature Engineering
+data['price_per_bed'] = data['price'] / data['beds']
+
+# Easy EDA – Distributions
+# Price Distribution
+plt.figure(figsize=(8,5))
+sns.histplot(data=data[data['price']<1500], x='price', bins=50)
+plt.title('Price Distribution')
+plt.show()
+
+# Availability Distribution
+plt.figure(figsize=(6,3))
+sns.histplot(data=data, x='availability_365', bins=50)
+plt.title('Availability Distribution')
+plt.show()
+
+# Price by Neighborhood Group
+sns.barplot(data=data, x='neighbourhood_group', y='price')
+plt.title('Average Price per Neighborhood Group')
+plt.show()
+
+# Scatter – Reviews vs Price
+plt.figure(figsize=(8,5))
+sns.scatterplot(data=data, x='number_of_reviews', y='price')
+plt.title('Number of Reviews vs Price')
+plt.show()
